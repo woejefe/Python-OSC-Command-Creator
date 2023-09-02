@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QSlider
 
 # OSC client setup
-client = udp_client.SimpleUDPClient("10.10.10.100", 4559)  # Replace with your OSC server IP and port
+client = udp_client.SimpleUDPClient("127.0.0.1", 4559)  # Replace with your OSC server IP and port
 
 
 
