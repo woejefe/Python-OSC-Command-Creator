@@ -155,9 +155,12 @@ def load_project():
     if file_path:
         # Load the saved file and restore object placements
         with open(file_path, "r") as file:
-            for line in file:
-                object_id, x, y = line.strip().split(",")
-                object_placements[str(object_id)] = (int(x), int(y))
+             # Loop through the loaded data and move the objects
+            for object_data in object_placements.items():
+                object_id = object_data['id']
+                x = object_data['x']
+                y = object_data['y']
+                move_object(str(object_id), x, y)
                 
  
         current_file_path = file_path
