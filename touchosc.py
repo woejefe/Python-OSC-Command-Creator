@@ -76,7 +76,16 @@ def edit_object(object):
         new_color = askcolor(title="Tkinter Color Chooser")
         if new_color:
             object.config(bg=new_color[1])
-                   
+        
+     
+        confirmation = simpledialog.askstring("Delete Object", "Are you sure you want to delete object? (yes/no)")
+        if confirmation and confirmation.lower() == "yes":
+        # Code to delete the object
+            print(f"Deleting {object}...")
+            object.destroy()
+        # Add your code to delete the object here
+        else:
+            print("Deletion canceled.")
             
     else:
            print("not in edit mode")
