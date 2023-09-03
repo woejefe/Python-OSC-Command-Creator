@@ -104,7 +104,6 @@ def edit_object(object):
 root = tk.Tk()
 root.title("OSC command Send")
 
-
 # Create the input menu
 commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
 
@@ -112,7 +111,7 @@ commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1
 canvas = tk.Canvas(root, width=500, height=500, bg="white")
 canvas.pack()
 
-#create main window
+#create dropdown for command osc command list
 input = ttk.Combobox(root, values=commands)
 input.pack()
 
