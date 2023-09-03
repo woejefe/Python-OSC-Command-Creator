@@ -12,6 +12,8 @@ client2 = udp_client.SimpleUDPClient("127.0.0.1", 4559)  # Replace with your OSC
 
 # Add a new variable to keep track of edit mode
 edit_mode = False
+
+#define osc argument value for switching on and off
 arg_value=0
     
 
@@ -20,9 +22,8 @@ def toggle_edit_mode():
     global edit_mode
     edit_mode = not edit_mode
 
-def send_osc_command(object_name, arg_value):
-    # Replace with your OSC command format
-   
+# if in edit mode dont send osc, if not in edit mode send "object_name" as osc command
+def send_osc_command(object_name, arg_value):  
     if edit_mode:
         print ("in edit mode.")
     else:
@@ -74,7 +75,8 @@ def edit_object(object):
         
         new_color = askcolor(title="Tkinter Color Chooser")
         if new_color:
-            object.config(bg=new_color[1])    
+            object.config(bg=new_color[1])
+                   
             
     else:
            print("not in edit mode")
