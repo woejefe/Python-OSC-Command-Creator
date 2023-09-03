@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 from pythonosc import udp_client
-from tkinter import simpledialog
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QSlider
 from tkinter.colorchooser import askcolor
-from tkinter import Tk, filedialog
+from tkinter import Tk, filedialog,messagebox,simpledialog
 from PIL import Image, ImageTk
+
 
 # OSC client setup
 client = udp_client.SimpleUDPClient("127.0.0.1", 7001)
@@ -17,7 +18,15 @@ edit_mode = False
 
 #define osc argument value for switching on and off
 arg_value=0
-    
+
+# Create the input menu
+commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
+
+# Variable to store the current project file path
+current_file_path = None 
+
+# Dictionary to store object placements
+object_placements = {}
 
 # Add a new method to toggle edit mode
 def toggle_edit_mode():
@@ -33,15 +42,16 @@ def update_button_color():
         edit_button.config(bg='orange',text='Send mode')  # Set button color to red when edit mode is false    
 
 
-# if in edit mode dont send osc, if not in edit mode send "object_name" as osc command
+# if in edit mode dont send osc, if not in send mode send "object_name" as osc command
 def send_osc_command(object_name, arg_value):  
     if edit_mode:
-        print ("in edit mode.")
+        print ("cant send commands in edit mode.")
     else:
         osc_command = f"{object_name}"        
         client.send_message(osc_command, 1-arg_value)
         client2.send_message(osc_command, 1-arg_value)
 
+#Function im working on to eventually be able to choose different object types
 def my_object():
     box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
     box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
@@ -57,9 +67,11 @@ def create_object():
         object.bind("<ButtonRelease-1>", lambda event: send_osc_command(object_name,1-arg_value))
         object.bind("<B1-Motion>", move_object)  # Bind the motion event for dragging
         object.bind("<Button-2>", lambda event: edit_object(object))
-        object.place(x=100, y=100)  # Set the initial position of the object              
+        object.place(x=100, y=100)  # Set the initial position of the object
+        
+        
     else:
-        print("not in edit mode")
+        print("clcike send mode button to change to edit mode")
 
 
 #Function to be able to move object while in edit mode
@@ -70,9 +82,10 @@ def move_object(event):
         y = event.y_root - root.winfo_rooty() - object.winfo_height() // 2
         # Check if the new position is within the canvas boundaries
         if 0 <= x <= canvas.winfo_width() - object.winfo_width() and 0 <= y <= canvas.winfo_height() - object.winfo_height():
-            object.place(x=x, y=y)  
+            object.place(x=x, y=y) 
+            object_placements[object] = (event.x, event.y)
     else:
-        print("not in edit mode")                 
+        print("not in edit mode. click edit button to enable moving of objects")                 
 
 #Function to edit the object and or delete it
 def edit_object(object):
@@ -95,16 +108,71 @@ def edit_object(object):
             print(f"Deleting {object}...")
             object.destroy()
         else:
-            print("Deletion canceled.")           
+            print("Deletion canceled.")    
+            
     else:
-         print("not in edit mode")
+         print("not in edit mode. put in edit mode to edit or move object.")
+
+def exit_program(event):
+    if messagebox.askokcancel("Exit", "Are you sure you want to exit?"):
+        root.destroy()
+
+# Function to handle saving the project
+def save_project():
+    global current_file_path
+
+    if current_file_path:
+        # Save changes to the current file
+        # Add your code here to save the project
+
+        # Save object placements to the file
+        with open(current_file_path, "w") as file:
+            for object_id, placement in object_placements.items():
+                file.write(f"{object_id},{placement[0]},{placement[1]}\n")
+
+        messagebox.showinfo("Save", "Project saved successfully.")
+    else:
+        # If no current file path, prompt the user to choose a file path
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+
+        if file_path:
+            # Save changes to the chosen file
+            # Add your code here to save the project
+
+            # Save object placements to the file
+            with open(file_path, "w") as file:
+                for object_id, placement in object_placements.items():
+                    file.write(f"{object_id},{placement[0]},{placement[1]}\n")
+
+            current_file_path = file_path
+            messagebox.showinfo("Save", "Project saved successfully.")
+            
+
+# Function to load the saved file and restore object placements
+def load_project():
+    global current_file_path
+
+    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+
+    if file_path:
+        # Load the saved file and restore object placements
+        with open(file_path, "r") as file:
+            for line in file:
+                object_id, x, y = line.strip().split(",")
+                object_placements[int(object_id)] = (int(x), int(y))
+
+        current_file_path = file_path
+        messagebox.showinfo("Load", "Project loaded successfully.")
+
+
 
 # Create the main window
 root = tk.Tk()
-root.title("OSC command Send")
+root.overrideredirect(True)
+# Bind the Escape key event to the exit_program function
+root.bind("<Escape>", exit_program)
 
-# Create the input menu
-commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
+
 
 #create canvas
 canvas = tk.Canvas(root, width=500, height=500, bg="white")
@@ -121,6 +189,14 @@ create_button.pack()
 # Create the "Edit Mode" toggle
 edit_button = tk.Button(root, text="Edit Mode",command=toggle_edit_mode)
 edit_button.pack()
+
+# Add a "Save" button to the window
+save_button = tk.Button(root, text="Save", command=save_project)
+save_button.pack()
+
+# Add a "Load" button to the window
+load_button = tk.Button(root, text="Load", command=load_project)
+load_button.pack()
 
 # Update the edit button color initially
 update_button_color()
