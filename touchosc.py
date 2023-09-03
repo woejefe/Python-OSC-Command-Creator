@@ -79,7 +79,7 @@ def move_object(event):
         x = event.x_root - root.winfo_rootx() - object.winfo_width() // 2
         y = event.y_root - root.winfo_rooty() - object.winfo_height() // 2
         # Check if the new position is within the canvas boundaries
-        if 0 <= x <= canvas.winfo_width() - object.winfo_width() and 0 <= y <= canvas.winfo_height() - object.winfo_height():
+        if 0 <= x <= objectcanvas.winfo_width() - object.winfo_width() and 0 <= y <= objectcanvas.winfo_height() - object.winfo_height():
             object.place(x=x, y=y) 
             object_placements[object] = (event.x, event.y)
     else:
@@ -177,31 +177,36 @@ root.bind("<Escape>", exit_program)
 
 
 #create canvas
-canvas = tk.Canvas(root, width=500, height=500, bg="white")
-canvas.pack()
+objectcanvas = tk.Canvas(root, width=500, height=500, bg="white")
+objectcanvas.pack()
+
+#create canvas for control buttons
+controlcanvas = tk.Canvas(root, width=500, height=500, bg="grey")
+controlcanvas.pack()
 
 #create dropdown for command osc command list
-input = ttk.Combobox(root, values=commands)
+input = ttk.Combobox(controlcanvas, values=commands)
 input.pack()
 
 # Create the "Create Object" button
-create_button = tk.Button(root, text="Create Button", command=create_object)
+create_button = tk.Button(controlcanvas, text="Create Button", command=create_object)
 create_button.pack()
 
 # Create the "Edit Mode" toggle
-edit_button = tk.Button(root, text="Edit Mode",command=toggle_edit_mode)
+edit_button = tk.Button(controlcanvas, text="Edit Mode",command=toggle_edit_mode)
 edit_button.pack()
 
 # Add a "Save" button to the window
-save_button = tk.Button(root, text="Save", command=save_project)
+save_button = tk.Button(controlcanvas, text="Save", command=save_project)
 save_button.pack()
 
 # Add a "Load" button to the window
-load_button = tk.Button(root, text="Load", command=load_project)
+load_button = tk.Button(controlcanvas, text="Load", command=load_project)
 load_button.pack()
 
 # Update the edit button color initially
 update_button_color()
+
 
 # Start the event loop
 root.mainloop()
