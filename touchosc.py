@@ -21,6 +21,14 @@ arg_value=0
 def toggle_edit_mode():
     global edit_mode
     edit_mode = not edit_mode
+    update_button_color()
+
+def update_button_color():
+    if edit_mode:
+        edit_button.config(bg='green',text='Edit Mode')  # Set button color to green when edit mode is true
+    else:
+        edit_button.config(bg='orange',text='Send mode')  # Set button color to red when edit mode is false    
+
 
 # if in edit mode dont send osc, if not in edit mode send "object_name" as osc command
 def send_osc_command(object_name, arg_value):  
@@ -30,7 +38,11 @@ def send_osc_command(object_name, arg_value):
         osc_command = f"{object_name}"        
         client.send_message(osc_command, 1-arg_value)
         client2.send_message(osc_command, 1-arg_value)
-        
+
+def my_object():
+    box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
+    box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
+    
      
 
 def create_object():
@@ -38,9 +50,10 @@ def create_object():
         object_name = input.get()
         object = tk.Button(root, text=simpledialog.askstring("Name Object", "Enter a name:"), bg="lightblue", width=16, height=9)
         object.bind("<Button-1>", lambda event: send_osc_command(object_name,arg_value))
+        object.bind("<Button-3>", lambda event: send_osc_command(object_name,arg_value))
         object.bind("<ButtonRelease-1>", lambda event: send_osc_command(object_name,1-arg_value))
         object.bind("<B1-Motion>", move_object)  # Bind the motion event for dragging
-        object.bind("<Button-3>", lambda event: edit_object(object))
+        object.bind("<Button-2>", lambda event: edit_object(object))
         object.place(x=100, y=100)  # Set the initial position of the object
         objects.append(object)  # Add the object to the list
     else:
@@ -75,9 +88,8 @@ def edit_object(object):
         
         new_color = askcolor(title="Tkinter Color Chooser")
         if new_color:
-            object.config(bg=new_color[1])
-        
-     
+            object.config(bg=new_color[1])    
+            
         confirmation = simpledialog.askstring("Delete Object", "Are you sure you want to delete object? (yes/no)")
         if confirmation and confirmation.lower() == "yes":
         # Code to delete the object
@@ -90,12 +102,9 @@ def edit_object(object):
     else:
            print("not in edit mode")
 
-        
-        
 # Create the main window
 root = tk.Tk()
 root.title("Object Selector")
-
 
 # Create the input menu
 objects = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
@@ -109,6 +118,8 @@ create_button.pack()
 # Create the "Edit Mode" toggle
 edit_button = tk.Button(root, text="Edit Mode",command=toggle_edit_mode)
 edit_button.pack()
+# Update the edit button color initially
+update_button_color()
 
 
 canvas = tk.Canvas(root, width=1280, height=720, bg="white")
