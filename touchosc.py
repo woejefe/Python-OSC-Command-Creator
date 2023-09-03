@@ -55,7 +55,7 @@ def create_object():
         object.bind("<B1-Motion>", move_object)  # Bind the motion event for dragging
         object.bind("<Button-2>", lambda event: edit_object(object))
         object.place(x=100, y=100)  # Set the initial position of the object
-        objects.append(object)  # Add the object to the list
+        commands.append(object)  # Add the object to the list
     else:
         print("not in edit mode")
 
@@ -90,6 +90,8 @@ def edit_object(object):
         if new_color:
             object.config(bg=new_color[1])    
             
+        
+        
         confirmation = simpledialog.askstring("Delete Object", "Are you sure you want to delete object? (yes/no)")
         if confirmation and confirmation.lower() == "yes":
         # Code to delete the object
@@ -99,16 +101,19 @@ def edit_object(object):
         else:
             print("Deletion canceled.")
             
+          
+            
     else:
            print("not in edit mode")
 
 # Create the main window
 root = tk.Tk()
-root.title("Object Selector")
+root.title("OSC command Send")
+
 
 # Create the input menu
-objects = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
-input = ttk.Combobox(root, values=objects)
+commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
+input = ttk.Combobox(root, values=commands)
 input.pack()
 
 # Create the "Create Object" button
