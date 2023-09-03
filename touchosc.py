@@ -25,7 +25,7 @@ def toggle_edit_mode():
     edit_mode = not edit_mode
     update_button_color()
 
-
+#Update Button Color definition/function
 def update_button_color():
     if edit_mode:
         edit_button.config(bg='green',text='Edit Mode')  # Set button color to green when edit mode is true
@@ -57,9 +57,7 @@ def create_object():
         object.bind("<ButtonRelease-1>", lambda event: send_osc_command(object_name,1-arg_value))
         object.bind("<B1-Motion>", move_object)  # Bind the motion event for dragging
         object.bind("<Button-2>", lambda event: edit_object(object))
-        object.place(x=100, y=100)  # Set the initial position of the object
-        
-        
+        object.place(x=100, y=100)  # Set the initial position of the object              
     else:
         print("not in edit mode")
 
@@ -72,28 +70,22 @@ def move_object(event):
         if 0 <= x <= root.winfo_width() - object.winfo_width() and 0 <= y <= root.winfo_height() - object.winfo_height():
             object.place(x=x, y=y)  
     else:
-        print("not in edit mode")
-                 
+        print("not in edit mode")                 
 
 def edit_object(object):
-    if edit_mode:
-        
+    if edit_mode:       
         new_name = simpledialog.askstring("Edit Object", "Enter a new name:")
         if new_name:
-            object.config(text=new_name)
-        
+            object.config(text=new_name)       
         new_width = simpledialog.askstring("Edit width", "Enter a new width:")
         if new_width:
-            object.config(width=new_width)
-            
+            object.config(width=new_width)            
         new_height = simpledialog.askstring("Edit height", "Enter a new height:")
         if new_height:
-            object.config(height=new_height)
-        
+            object.config(height=new_height)       
         new_color = askcolor(title="Tkinter Color Chooser")
         if new_color:
-            object.config(bg=new_color[1])    
-        
+            object.config(bg=new_color[1])           
         confirmation = simpledialog.askstring("Delete Object", "Are you sure you want to delete object? (yes/no)")
         if confirmation and confirmation.lower() == "yes":
         # Code to delete the object
@@ -101,12 +93,9 @@ def edit_object(object):
             object.destroy()
         # Add your code to delete the object here
         else:
-            print("Deletion canceled.")
-            
-          
-            
+            print("Deletion canceled.")           
     else:
-           print("not in edit mode")
+         print("not in edit mode")
 
 # Create the main window
 root = tk.Tk()
