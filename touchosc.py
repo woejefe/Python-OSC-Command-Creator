@@ -94,7 +94,6 @@ def edit_object(object):
         # Code to delete the object
             print(f"Deleting {object}...")
             object.destroy()
-        # Add your code to delete the object here
         else:
             print("Deletion canceled.")           
     else:
