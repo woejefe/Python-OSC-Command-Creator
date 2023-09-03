@@ -42,9 +42,9 @@ def send_osc_command(object_name, arg_value):
         client.send_message(osc_command, 1-arg_value)
         client2.send_message(osc_command, 1-arg_value)
 
-#def my_object():
-    #box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
-    #box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
+def my_object():
+    box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
+    box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
     
      
 
