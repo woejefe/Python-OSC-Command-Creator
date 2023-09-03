@@ -47,7 +47,7 @@ def my_object():
     box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
     
      
-
+#Function to create a object to click on and send OSC command
 def create_object():
     if edit_mode:
         object_name = input.get()
@@ -61,17 +61,20 @@ def create_object():
     else:
         print("not in edit mode")
 
+
+#Function to be able to move object while in edit mode
 def move_object(event):
     if edit_mode:
         object = event.widget
         x = event.x_root - root.winfo_rootx() - object.winfo_width() // 2
         y = event.y_root - root.winfo_rooty() - object.winfo_height() // 2
         # Check if the new position is within the canvas boundaries
-        if 0 <= x <= root.winfo_width() - object.winfo_width() and 0 <= y <= root.winfo_height() - object.winfo_height():
+        if 0 <= x <= canvas.winfo_width() - object.winfo_width() and 0 <= y <= canvas.winfo_height() - object.winfo_height():
             object.place(x=x, y=y)  
     else:
         print("not in edit mode")                 
 
+#Function to edit the object and or delete it
 def edit_object(object):
     if edit_mode:       
         new_name = simpledialog.askstring("Edit Object", "Enter a new name:")
@@ -105,6 +108,11 @@ root.title("OSC command Send")
 # Create the input menu
 commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
 
+#create canvas
+canvas = tk.Canvas(root, width=500, height=500, bg="white")
+canvas.pack()
+
+#create main window
 input = ttk.Combobox(root, values=commands)
 input.pack()
 
@@ -119,9 +127,5 @@ edit_button.pack()
 # Update the edit button color initially
 update_button_color()
 
-
-canvas = tk.Canvas(root, width=500, height=500, bg="white")
-canvas.pack()
-
-# Start the Tkinter event loop
+# Start the event loop
 root.mainloop()
