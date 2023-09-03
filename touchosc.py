@@ -12,27 +12,32 @@ client2 = udp_client.SimpleUDPClient("127.0.0.1", 4559)  # Replace with your OSC
 
 # Add a new variable to keep track of edit mode
 edit_mode = False
+arg_value=0
+    
 
 # Add a new method to toggle edit mode
 def toggle_edit_mode():
     global edit_mode
     edit_mode = not edit_mode
 
-def send_osc_command(object_name):
+def send_osc_command(object_name, arg_value):
     # Replace with your OSC command format
+   
     if edit_mode:
         print ("in edit mode.")
     else:
-        osc_command = f"{object_name}"
-        client.send_message(osc_command, 0)
-        client2.send_message(osc_command, 0)
+        osc_command = f"{object_name}"        
+        client.send_message(osc_command, 1-arg_value)
+        client2.send_message(osc_command, 1-arg_value)
+        
+     
 
 def create_object():
     if edit_mode:
         object_name = input.get()
         object = tk.Button(root, text=simpledialog.askstring("Name Object", "Enter a name:"), bg="lightblue", width=16, height=9)
-        object.bind("<Button-1>", lambda event: send_osc_command(object_name))
-        object.bind("<ButtonRelease-1>", lambda event: send_osc_command(object_name))
+        object.bind("<Button-1>", lambda event: send_osc_command(object_name,arg_value))
+        object.bind("<ButtonRelease-1>", lambda event: send_osc_command(object_name,1-arg_value))
         object.bind("<B1-Motion>", move_object)  # Bind the motion event for dragging
         object.bind("<Button-3>", lambda event: edit_object(object))
         object.place(x=100, y=100)  # Set the initial position of the object
