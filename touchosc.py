@@ -23,6 +23,7 @@ def toggle_edit_mode():
     edit_mode = not edit_mode
     update_button_color()
 
+
 def update_button_color():
     if edit_mode:
         edit_button.config(bg='green',text='Edit Mode')  # Set button color to green when edit mode is true
@@ -39,23 +40,24 @@ def send_osc_command(object_name, arg_value):
         client.send_message(osc_command, 1-arg_value)
         client2.send_message(osc_command, 1-arg_value)
 
-def my_object():
-    box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
-    box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
+#def my_object():
+    #box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
+    #box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
     
      
 
 def create_object():
     if edit_mode:
         object_name = input.get()
-        object = tk.Button(root, text=simpledialog.askstring("Name Object", "Enter a name:"), bg="lightblue", width=16, height=9)
+        object = tk.Button(root, text=simpledialog.askstring("Name Object", "Enter a name:"), bg="lightblue", width=5, height=2)
         object.bind("<Button-1>", lambda event: send_osc_command(object_name,arg_value))
         object.bind("<Button-3>", lambda event: send_osc_command(object_name,arg_value))
         object.bind("<ButtonRelease-1>", lambda event: send_osc_command(object_name,1-arg_value))
         object.bind("<B1-Motion>", move_object)  # Bind the motion event for dragging
         object.bind("<Button-2>", lambda event: edit_object(object))
         object.place(x=100, y=100)  # Set the initial position of the object
-        commands.append(object)  # Add the object to the list
+        
+        
     else:
         print("not in edit mode")
 
@@ -113,6 +115,7 @@ root.title("OSC command Send")
 
 # Create the input menu
 commands = ["/press/bank/1/1","/press/bank/1/2","/press/bank/1/3","/press/bank/1/4","/press/bank/1/5","/press/bank/1/6","/press/bank/1/7","/press/bank/1/8"]  # Add your object names here
+
 input = ttk.Combobox(root, values=commands)
 input.pack()
 
@@ -123,11 +126,12 @@ create_button.pack()
 # Create the "Edit Mode" toggle
 edit_button = tk.Button(root, text="Edit Mode",command=toggle_edit_mode)
 edit_button.pack()
+
 # Update the edit button color initially
 update_button_color()
 
 
-canvas = tk.Canvas(root, width=1280, height=720, bg="white")
+canvas = tk.Canvas(root, width=500, height=500, bg="white")
 canvas.pack()
 
 # Start the Tkinter event loop
