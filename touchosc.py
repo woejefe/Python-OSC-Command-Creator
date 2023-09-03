@@ -1,11 +1,9 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter.colorchooser import askcolor
+from tkinter import Tk, filedialog,messagebox,simpledialog,ttk
 from pythonosc import udp_client
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QSlider
-from tkinter.colorchooser import askcolor
-from tkinter import Tk, filedialog,messagebox,simpledialog
 from PIL import Image, ImageTk
 
 
@@ -71,7 +69,7 @@ def create_object():
         
         
     else:
-        print("clcike send mode button to change to edit mode")
+        print("click send mode button to change to edit mode")
 
 
 #Function to be able to move object while in edit mode
@@ -159,8 +157,9 @@ def load_project():
         with open(file_path, "r") as file:
             for line in file:
                 object_id, x, y = line.strip().split(",")
-                object_placements[int(object_id)] = (int(x), int(y))
-
+                object_placements[str(object_id)] = (int(x), int(y))
+                
+ 
         current_file_path = file_path
         messagebox.showinfo("Load", "Project loaded successfully.")
 
