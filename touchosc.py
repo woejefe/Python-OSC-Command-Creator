@@ -5,6 +5,8 @@ from tkinter import simpledialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QSlider
 from tkinter.colorchooser import askcolor
+from tkinter import Tk, filedialog
+from PIL import Image, ImageTk
 
 # OSC client setup
 client = udp_client.SimpleUDPClient("127.0.0.1", 7001)
@@ -91,8 +93,6 @@ def edit_object(object):
         new_color = askcolor(title="Tkinter Color Chooser")
         if new_color:
             object.config(bg=new_color[1])    
-            
-        
         
         confirmation = simpledialog.askstring("Delete Object", "Are you sure you want to delete object? (yes/no)")
         if confirmation and confirmation.lower() == "yes":
