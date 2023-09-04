@@ -50,10 +50,20 @@ def send_osc_command(object_name, arg_value):
         client2.send_message(osc_command, 1-arg_value)
 
 #Function im working on to eventually be able to choose different object types
-def select_object_type():
-    box=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=10, height=9)
-    box1=tk.Button(root, text=simpledialog.askstring("Name", "Enter:"), bg="blue", width=20, height=20)
+class select_object_type:
+    objshape = ()
+    def create_rectangle(self,shape):
+        rectangle = buttoncanvas.create_rectangle(1,1, buttoncanvaswidth,buttoncanvasheight,fill="blue")
+        self.shape = rectangle
     
+    def create_oval(self):    
+        self.oval = buttoncanvas.create_oval(1,1, buttoncanvaswidth,buttoncanvasheight,fill="green")
+    
+    def create_canvasbuttonimg(self):    
+        self.canvasbuttonimg = buttoncanvas.create_image(100,100, image=photoimage, anchor="nw")
+
+obj = select_object_type()
+
      
 #Function to create a object to click on and send OSC command
 def create_object():
@@ -187,6 +197,7 @@ controlcanvas.pack()
 #create dropdown for command osc command list
 input = ttk.Combobox(controlcanvas, values=commands)
 input.pack()
+
 
 # Create the "Create Object" button
 create_button = tk.Button(controlcanvas, text="Create Button", command=create_object)
